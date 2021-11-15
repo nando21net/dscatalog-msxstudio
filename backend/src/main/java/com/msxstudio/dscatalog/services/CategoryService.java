@@ -1,8 +1,10 @@
 package com.msxstudio.dscatalog.services;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import com.msxstudio.dscatalog.services.exceptions.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.msxstudio.dscatalog.dto.CategoryDTO;
 import com.msxstudio.dscatalog.entities.Category;
 import com.msxstudio.dscatalog.repositories.CategoryRepository;
+
 
 @Service
 public class CategoryService {
@@ -23,6 +26,14 @@ public class CategoryService {
 		List<Category> list =  repository.findAll();
 		return list.stream().map(x -> new CategoryDTO(x)).collect(Collectors.toList());
 			
+	}
+
+	@Transactional(readOnly = true)
+	public CategoryDTO findById(Long id) {
+		Optional<Category> obj = repository.findById(id);
+		Category entity = obj.orElseThrow(() -> new EntityNotFoundException("Entity not found"));
+		return new CategoryDTO(entity);
+		
 	}
 
 }

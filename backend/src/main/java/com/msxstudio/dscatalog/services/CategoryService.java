@@ -60,7 +60,7 @@ public class CategoryService {
 		}
 	}
 
-	public void update(Long id) {
+	public void delete(Long id) {
 		try {
 
 			repository.deleteById(id);
